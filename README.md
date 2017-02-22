@@ -133,7 +133,7 @@ initate an HTTP POST request to the call back Url in **WF_CallbackUrl** in your 
         public string DASH { get; set; }
     }
 
-You may probably need to create different logic here depending on what you want to do.
+You may probably need to create a different application workflow here depending on what you want to do by triggering further functions or logic apps.
 
 ### License
 This sample project is licensed under [the MIT License](LICENSE) and is provided with no warranty.
