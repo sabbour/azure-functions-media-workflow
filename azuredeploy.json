@@ -73,10 +73,10 @@
   },
   "variables": {
     "lowerAppName": "[toLower(parameters('appName'))]",
-    "functionAppName": "[concat(variables('lowerAppName'),'-functions')]",
-    "storageAccountName": "[concat('storage',uniqueString(resourceGroup().id))]",
-    "mediaServiceName": "[concat('media',uniqueString(resourceGroup().id))]",
-    "hostingPlanName": "[concat('plan', uniqueString(resourceGroup().id))]",
+    "functionAppName": "[concat(variables('lowerAppName'),'functions')]",
+    "storageAccountName": "[concat(uniqueString(resourceGroup().id),'storage')]",
+    "mediaServiceName": "[concat(uniqueString(resourceGroup().id),'media')]",
+    "hostingPlanName": "[concat(uniqueString(resourceGroup().id),'plan')]",
     "storageAccountid": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
   },
   "resources": [
