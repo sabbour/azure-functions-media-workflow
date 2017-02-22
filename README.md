@@ -34,6 +34,7 @@ The deploymnet template will automatically create the following resources:
 * Storage account attached to your media account.
 * This Azure Functions application with your source code configured for continuous integration.
 * The required function's application settings will be updated to point to the new resources automatically. You can modify any of these settings after deployment.
+* **IMPORTANT:** Make sure your Streaming Endpoint is running, otherwise
 
 Tip: You can use http://requestb.in to generate a POST destination to use as your callback URL.
 
@@ -95,7 +96,8 @@ Once we have those in place, we create a new Input Asset from an existing blob, 
 We also instruct the platform to publish progress change methods to the queue created earlier.
 
 ## ProcessEncodingStatusMessage Function
-The ProcessEncodingStatusMessage Function has a Queue Storage input/output binding trigger to an Azure Storage container.
+The ProcessEncodingStatusMessage Function has a Queue Storage input/output binding trigger to an Azure Storage container. We're also using Queues to track assets that
+failed publishing or failed encoding.
 
     "bindings": [
         {
@@ -106,11 +108,25 @@ The ProcessEncodingStatusMessage Function has a Queue Storage input/output bindi
         "connection": "WF_StorageConnection"
         },
         {
-        "name": "publishLocatorMsg",
         "type": "queue",
-        "direction": "out"
+        "name": "publishLocatorMsg",
         "queueName": "mwfpublishqueue",
         "connection": "WF_StorageConnection",
+        "direction": "out"
+        },
+        {
+        "type": "queue",
+        "name": "failedPublishingMessage",
+        "queueName": "mwffailedpublishqueue",
+        "connection": "WF_StorageConnection",
+        "direction": "out"
+        },
+        {
+        "type": "queue",
+        "name": "failedEncodingMessage",
+        "queueName": "mwffailedencodingqueue",
+        "connection": "WF_StorageConnection",
+        "direction": "out"
         }
     ]
 
@@ -121,6 +137,8 @@ In the run.csx file, we then bind the encodingJobMsg and the publishLocatorMsg.
 
 Once this function receives a notification message (EncodingJobMessage) on the queue from Azure Media Services, it will inspect it, and if the message states that the job has been encoded
 it will create a Streaming Locator for the Output Asset, publish it with a 10-year streaming policy then put a message on another queue with the asset details.
+
+**IMPORTANT:**: You need to have at least one Streaming Endpoint in the Running state in order for the publshing to work.
 
 
 ## ProcessPublishingMessage Function
