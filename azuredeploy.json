@@ -76,7 +76,7 @@
     "functionAppName": "[concat(variables('lowerAppName'),'-functions')]",
     "storageAccountName": "[concat('storage',uniqueString(resourceGroup().id))]",
     "mediaServiceName": "[concat('media',uniqueString(resourceGroup().id))]",
-    "hostingPlanName": "[concat('plan', uniqueString(resourceGroup().id)))]",
+    "hostingPlanName": "[concat('plan', uniqueString(resourceGroup().id))]",
     "storageAccountid": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
   },
   "resources": [

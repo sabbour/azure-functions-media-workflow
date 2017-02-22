@@ -35,6 +35,10 @@ The deploymnet template will automatically create the following resources:
 * This Azure Functions application with your source code configured for continuous integration.
 * The required function's application settings will be updated to point to the new resources automatically. You can modify any of these settings after deployment.
 
+Tip: You can use http://requestb.in to generate a POST destination to use as your callback URL.
+
+Once the template is deployed, upload an mp4 file into the "input" container of your Azure Blob Storage account, watch the file get encoded and receive the message on the requestb.in
+
 ### Function Application Settings 
 The following applications settings are created upon deployment and are automatically linked to the resources
 deployed with the azuredeploy.json template.
