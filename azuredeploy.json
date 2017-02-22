@@ -8,16 +8,22 @@
         "description": "The name of the Function application to be deployed. The name should be globally unique, all lowercase letters or numbers with no spaces."
       }
     },
-    "functionKey": {
+    "presetName": {
       "type": "string",
-      "defaultValue": "j0txf1f8msjytzvpe40nxbpxdcxtqcgxy0nt",
+      "defaultValue": "H264 Multiple Bitrate 720p",
       "metadata": {
-        "description": "Function App Key to use for authorization of Webhook. You should replace this with the key you want to use for your Function application authorization"
+        "description": "A built-in encoding preset name. Select your preset name from https://docs.microsoft.com/en-us/azure/media-services/media-services-mes-presets-overview"
+      }
+    },
+    "callbackUrl": {
+      "type": "string",
+      "metadata": {
+        "description": "Optional: A URL which will be POSTed to once the asset is published."
       }
     },
     "sourceCodeRepositoryURL": {
       "type": "string",
-      "defaultValue": "https://github.com/sabbour/media-services-dotnet-functions-integration",
+      "defaultValue": "https://github.com/sabbour/azure-functions-media-workflow",
       "metadata": {
         "description": "Source code repository URL. Is is highly recommended that you first fork the samples repository and point this to your fork. If you are using your own fork, set the sourceCodeManualIntegration property to false below."
       }
@@ -39,11 +45,11 @@
   },
   "variables": {
     "lowerAppName": "[toLower(parameters('appName'))]",
-    "storageAccountid": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
-    "mediaServiceName": "[concat('media',uniqueString(resourceGroup().id))]",
     "functionAppName": "[concat(variables('lowerAppName'),'-functions')]",
     "storageAccountName": "[concat('storage',uniqueString(resourceGroup().id))]",
-    "hostingPlanName": "[concat(variables('lowerAppName'),concat('plan', uniqueString(resourceGroup().id)))]"
+    "mediaServiceName": "[concat('media',uniqueString(resourceGroup().id))]",
+    "hostingPlanName": "[concat('plan', uniqueString(resourceGroup().id)))]",
+    "storageAccountid": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
   },
   "resources": [
     {
@@ -128,18 +134,18 @@
             "[resourceId('Microsoft.Web/Sites/sourcecontrols', variables('functionAppName'), 'web')]",
             "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
           ],
-          "properties": {
+      "properties": {
             "FUNCTIONS_EXTENSION_VERSION": "~1",
             "WEBSITE_NODE_DEFAULT_VERSION": "6.5.0",
             "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]",
             "AzureWebJobsDashboard": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]",
-            "AMSAccount": "[variables('mediaServiceName')]",
-            "AMSKey": "[listKeys(variables('mediaServiceName'),'2015-10-01').primaryKey]",
-            "MediaServicesStorageAccountName": "[variables('storageAccountName')]",
-            "MediaServicesStorageAccountKey": "[listKeys(variables('storageAccountid'),'2015-05-01-preview').key1]",
-            "StorageConnection": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]",
-            "SigningKey": "wOlDEUJ4/VN1No8HxVxpsRvej0DZrO5DXvImGLjFhfctPGFiMkUA0Cj8HSfJW7lePX9XsfHAMhw30p0yYqG+1A==",
-            "WebHookEndpoint": "[concat(resourceId('Microsoft.Web/sites', variables('functionAppName')),'/api/Notification_Webhook_Function?code=', parameters('functionKey'))]"
+            "WF_MediaServicesAccountName": "[variables('mediaServiceName')]",
+            "WF_MediaServicesAccountKey": "[listKeys(variables('mediaServiceName'),'2015-10-01').primaryKey]",
+            "WF_StorageAccountName": "[variables('storageAccountName')]",
+            "WF_StorageAccountKey": "[listKeys(variables('storageAccountid'),'2015-05-01-preview').key1]",
+            "WF_StorageConnection": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]",
+            "WF_PresetName": "[parameters('presetName')]",
+            "WF_CallbackUrl": "[parameters('callbackUrl')]"
           }
         },
         {

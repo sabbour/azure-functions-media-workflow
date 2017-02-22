@@ -1,7 +1,7 @@
 {
-  "itemDisplayName": "Azure Media Services DotNet Functions",
-  "description": "Sample Azure Media Services Functions for various scenarios",
-  "summary": "",
-  "githubUsername": "johndeu",
-  "dateUpdated": "2017-01-29"
+  "itemDisplayName": "Azure Functions Media Services Workflow",
+  "description": "A sample Azure Media Services workflow using Azure Functions",
+  "summary": "A sample Azure Media Services workflow using Azure Functions to control encoding, publishing and notification workflow",
+  "githubUsername": "sabbour",
+  "dateUpdated": "2017-02-22"
 }
