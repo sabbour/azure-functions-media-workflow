@@ -34,7 +34,7 @@ The deploymnet template will automatically create the following resources:
 * Storage account attached to your media account.
 * This Azure Functions application with your source code configured for continuous integration.
 * The required function's application settings will be updated to point to the new resources automatically. You can modify any of these settings after deployment.
-* **IMPORTANT:** Make sure your Streaming Endpoint is running, otherwise
+* **IMPORTANT:** Make sure your Streaming Endpoint is running, otherwise you will not be able to get the published URL.
 
 Tip: You can use http://requestb.in to generate a POST destination to use as your callback URL.
 
@@ -123,7 +123,7 @@ In the run.csx file, we then bind the encodingJobMsg and the publishLocatorMsg.
 Once this function receives a notification message (EncodingJobMessage) on the queue from Azure Media Services, it will inspect it, and if the message states that the job has been encoded
 it will create a Streaming Locator for the Output Asset, publish it with a 10-year streaming policy then put a message on another queue with the asset details.
 
-**IMPORTANT:**: You need to have at least one Streaming Endpoint in the Running state in order for the publshing to work.
+* **IMPORTANT:** Make sure your Streaming Endpoint is running, otherwise you will not be able to get the published URL.
 
 
 ## ProcessPublishingMessage Function
