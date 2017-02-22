@@ -1,0 +1,19 @@
+{
+  "bindings": [
+    {
+      "name": "encodingJobMsg",
+      "type": "queueTrigger",
+      "direction": "in",
+      "queueName": "mwfprogressqueue",
+      "connection": "WF_StorageConnection"
+    },
+    {
+      "type": "queue",
+      "name": "publishLocatorMsg",
+      "queueName": "mwfpublishqueue",
+      "connection": "WF_StorageConnection",
+      "direction": "out"
+    }
+  ],
+  "disabled": false
+}

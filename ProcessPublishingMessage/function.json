@@ -1,0 +1,12 @@
+{
+  "bindings": [
+    {
+      "name": "publishLocatorMsg",
+      "type": "queueTrigger",
+      "direction": "in",
+      "queueName": "mwfpublishqueue",
+      "connection": "WF_StorageConnection"
+    }
+  ],
+  "disabled": false
+}

@@ -1,0 +1,12 @@
+{
+  "bindings": [
+    {
+      "name": "inputBlob",
+      "type": "blobTrigger",
+      "direction": "in",
+      "path": "input/{fileName}.{fileExtension}",
+      "connection": "WF_StorageConnection"
+    }
+  ],
+  "disabled": false
+}
