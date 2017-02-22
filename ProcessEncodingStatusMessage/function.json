@@ -13,20 +13,6 @@
       "queueName": "mwfpublishqueue",
       "connection": "WF_StorageConnection",
       "direction": "out"
-    },
-    {
-      "type": "queue",
-      "name": "failedPublishingMessage",
-      "queueName": "mwffailedpublishqueue",
-      "connection": "WF_StorageConnection",
-      "direction": "out"
-    },
-    {
-      "type": "queue",
-      "name": "failedEncodingMessage",
-      "queueName": "mwffailedencodingqueue",
-      "connection": "WF_StorageConnection",
-      "direction": "out"
     }
   ],
   "disabled": false

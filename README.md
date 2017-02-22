@@ -96,8 +96,7 @@ Once we have those in place, we create a new Input Asset from an existing blob, 
 We also instruct the platform to publish progress change methods to the queue created earlier.
 
 ## ProcessEncodingStatusMessage Function
-The ProcessEncodingStatusMessage Function has a Queue Storage input/output binding trigger to an Azure Storage container. We're also using Queues to track assets that
-failed publishing or failed encoding.
+The ProcessEncodingStatusMessage Function has a Queue Storage input/output binding trigger to an Azure Storage container.
 
     "bindings": [
         {
@@ -111,20 +110,6 @@ failed publishing or failed encoding.
         "type": "queue",
         "name": "publishLocatorMsg",
         "queueName": "mwfpublishqueue",
-        "connection": "WF_StorageConnection",
-        "direction": "out"
-        },
-        {
-        "type": "queue",
-        "name": "failedPublishingMessage",
-        "queueName": "mwffailedpublishqueue",
-        "connection": "WF_StorageConnection",
-        "direction": "out"
-        },
-        {
-        "type": "queue",
-        "name": "failedEncodingMessage",
-        "queueName": "mwffailedencodingqueue",
         "connection": "WF_StorageConnection",
         "direction": "out"
         }

@@ -14,8 +14,6 @@ static readonly string _mediaServicesAccountKey = Environment.GetEnvironmentVari
 static readonly string _storageAccountName = Environment.GetEnvironmentVariable("WF_StorageAccountName");
 static readonly string _storageAccountKey = Environment.GetEnvironmentVariable("WF_StorageAccountKey");
 static readonly string _notificationQueueName = "mwfpublishqueue";
-static readonly string _notificationFailedPublishingQueueName = "mwffailedpublishqueue";
-static readonly string _notificationFailedEncodingQueueName = "mwffailedencodingqueue";
 
 // Media Services Credentials and Cloud Media Context fields
 private static CloudMediaContext _context = null;
@@ -23,10 +21,8 @@ private static MediaServicesCredentials _cachedCredentials = null;
 
 // Queue to send publish messages to
 private static CloudQueue _queue = null;
-private static CloudQueue _failedPublishingQueue = null;
-private static CloudQueue _failedEncodingQueue = null;
 
-public static void Run(EncodingJobMessage encodingJobMsg, out PublishedLocatorMessage publishLocatorMsg, out EncodingJobMessage failedPublishingMessage, out EncodingJobMessage failedEncodingMessage, TraceWriter log)
+public static void Run(EncodingJobMessage encodingJobMsg, out PublishedLocatorMessage publishLocatorMsg, TraceWriter log)
 {
     log.Info($"EventType: {encodingJobMsg.EventType}");
     log.Info($"MessageVersion: {encodingJobMsg.MessageVersion}");
@@ -35,8 +31,6 @@ public static void Run(EncodingJobMessage encodingJobMsg, out PublishedLocatorMe
 
     // Message
     publishLocatorMsg = null;
-    failedPublishingMessage = null;
-    failedEncodingMessage = null;
 
     // We are only interested in messages where EventType is "JobStateChange"
     if (encodingJobMsg.EventType == "JobStateChange")
@@ -59,8 +53,6 @@ public static void Run(EncodingJobMessage encodingJobMsg, out PublishedLocatorMe
             
             // Create the queue that will be receiving the notification messages
             _queue = CreateQueue(_storageAccountName, _storageAccountKey, _notificationQueueName);
-            _failedPublishingQueue = CreateQueue(_storageAccountName, _storageAccountKey, _notificationFailedPublishingQueueName);
-            _failedEncodingQueue = CreateQueue(_storageAccountName, _storageAccountKey, _notificationFailedEncodingQueueName);
 
             // Get the Asset related to the job
             var job = _context.Jobs.Where(j => j.Id == jobId).FirstOrDefault();
@@ -92,14 +84,12 @@ public static void Run(EncodingJobMessage encodingJobMsg, out PublishedLocatorMe
                 log.Info($"Set queue output {publishLocatorMsg}");
             }            
             else {
-                log.Warning($"Unable to generate a valid publish URL. Make sure you have at least one Streaming Endpoint in Running state.");
-                failedPublishingMessage = encodingJobMsg;
+                log.Error($"Unable to generate a valid publish URL. Make sure you have at least one Streaming Endpoint in Running state.");
             }
         }
         else if (jobState == JobState.Error)
         {
-            log.Info($"Job {jobId} failed with an error.");
-            failedEncodingMessage = encodingJobMsg;
+            log.Error($"Job {jobId} failed with an error.");
         }
     }
 }
